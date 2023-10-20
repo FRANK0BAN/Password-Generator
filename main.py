@@ -2,7 +2,6 @@ from tkinter import filedialog
 import customtkinter
 import random
 import string
-import tkinter as tk
 
 class Window:
 
