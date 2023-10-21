@@ -34,7 +34,7 @@
     "text_color": ["gray14", "gray84"],
     "placeholder_text_color": ["gray52", "gray62"]
   },
-  "CTkCheckBox": {
+  "CTkCheckbox": {
     "corner_radius": 6,
     "border_width": 3,
     "fg_color": ["#00A9D6", "#2388BD"],
