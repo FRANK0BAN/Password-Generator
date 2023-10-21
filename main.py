@@ -7,33 +7,49 @@ class Window:
 
     def __init__(self):
         self.window = None
-        self.version = "1.0"
         self.frame1 = None
         self.frame = None
         self.password= None
+        self.button = None
+        self.button1 = None
+        self.text = None
+        self.check_var = None
+        self.check_var1 = None
+        self.check_var2 = None
+        self.checkbox = None
+        self.checkbox1 = None
+        self.checkbox2 = None
+        self.slider = None
+        self.variable = None
+        self.appearance_mode_option_menu = None
+        self.title = None
+        self.textbox = None
+#       -------------------------
         self.icon_path = "Images/Password Generator logo.ico"
-        self.createWindow()
+        self.version = "1.0"
+        self.create_window()
 
-    def createWindow(self):
+    def create_window(self):
         self.window = customtkinter.CTk()
         self.window.title(f"Password generator {self.version}")
         self.window.geometry("1120x700")
         self.window.wm_resizable(False, False)
         self.window.iconbitmap(default=self.icon_path)
 #       -------------------------
-        self.createOptionsFrame()
-        self.createFrame()
-        self.createSlider()
-        self.createCheckbox()
-        self.createTextBox()
-        self.createTitle()
-        self.createButtons()
-        self.createModeMenu()
+        customtkinter.set_default_color_theme('themes/dark-blue.json')
+#       -------------------------
+        self.create_options_frame()
+        self.create_frame()
+        self.create_slider()
+        self.create_checkbox()
+        self.create_text_box()
+        self.create_title()
+        self.create_buttons()
+        self.create_mode_menu()
         self.window.mainloop()
 #       -------------------------
-        customtkinter.set_default_color_theme('themes/dark-blue.json')
 
-    def createFrame(self):
+    def create_frame(self):
         self.frame = customtkinter.CTkFrame(master=self.window, width=240, height=1920)
         self.frame.place(rely=0, relx=0)
 
@@ -43,57 +59,57 @@ class Window:
     def change_appearance_mode_event(self, new_appearance_mode: str):
         customtkinter.set_appearance_mode(new_appearance_mode)
 
-    def createSlider(self):
+    def create_slider(self):
         self.slider = customtkinter.CTkSlider(master=self.frame1, from_=1, to=51, command=self.slider_event,
-                                              number_of_steps=50, width=520, height=20, border_width=5)
+                                                number_of_steps=50, width=520, height=20, border_width=5)
         self.slider.place(rely=0.10, relx=0.048)
 
         self.variable = self.slider.get()
 
         self.text = customtkinter.CTkLabel(master=self.frame1, text=f"Password length: {self.variable}",
-                                           font=("Segoe UI Variable Small Semibol", 21))
+                                        font=("Segoe UI Variable Small Semibol", 21))
         self.text.place(rely=0.09, relx=0.715)
 
-    def createModeMenu(self):
-        self.appearance_mode_optionemenu = customtkinter.CTkOptionMenu(master=self.frame, values=["System", "Dark", "Light"],
-                                                                       command=self.change_appearance_mode_event,
-                                                                       width=185, height=34, font=("Arial", 14))
-        self.appearance_mode_optionemenu.place(rely=0.33, relx=0.12)
+    def create_mode_menu(self):
+        self.appearance_mode_option_menu = customtkinter.CTkOptionMenu(master=self.frame, values=["System", "Dark", "Light"],
+                                                                    command=self.change_appearance_mode_event,
+                                                                    width=185, height=34, font=("Arial", 14))
+        self.appearance_mode_option_menu.place(rely=0.33, relx=0.12)
 
-    def createButtons(self):
+    def create_buttons(self):
         self.button = customtkinter.CTkButton(master=self.frame1, text="Generate password", width=240, height=40,
-                                              font=("Segoe UI Variable Small Semibol", 16), command=self.generate_password)
+                                            font=("Segoe UI Variable Small Semibol", 16), command=self.generate_password)
         self.button.place(rely=0.78, relx=0.05)
 
         self.button1 = customtkinter.CTkButton(master=self.frame1, text="Save my password", width=240, height=40,
-                                              font=("Segoe UI Variable Small Semibol", 16), command=self.clearLogs, state="disabled")
+                                            font=("Segoe UI Variable Small Semibol", 16), command=self.password_saver, state="disabled")
         self.button1.place(rely=0.78, relx=0.38)
 
-    def createCheckbox(self):
-            self.check_var = customtkinter.StringVar(value="on")
-            self.checkbox = customtkinter.CTkCheckBox(master=self.frame1, text=" Special characters -", variable=self.check_var,
-                                                    onvalue="on", offvalue="off", checkbox_width=30, checkbox_height=30,
-                                                    font=("Arial", 18), border_width=3, corner_radius=7)
-            self.checkbox.place(rely=0.25, relx=0.05)
+    def create_checkbox(self):
+        self.check_var = customtkinter.StringVar(value="on")
+        self.checkbox = customtkinter.CTkCheckBox(master=self.frame1, text=" Special characters -", variable=self.check_var,
+                                                onvalue="on", offvalue="off", checkbox_width=30, checkbox_height=30,
+                                                font=("Arial", 18), border_width=3, corner_radius=7)
+        self.checkbox.place(rely=0.25, relx=0.05)
 
-            self.check_var1 = customtkinter.StringVar(value="on")
-            self.checkbox1 = customtkinter.CTkCheckBox(master=self.frame1, text=" Numbers -", variable=self.check_var1,
-                                                    onvalue="on", offvalue="off", checkbox_width=30, checkbox_height=30,
-                                                    font=("Arial", 18), border_width=3, corner_radius=7)
-            self.checkbox1.place(rely=0.4, relx=0.05)
+        self.check_var1 = customtkinter.StringVar(value="on")
+        self.checkbox1 = customtkinter.CTkCheckBox(master=self.frame1, text=" Numbers -", variable=self.check_var1,
+                                                onvalue="on", offvalue="off", checkbox_width=30, checkbox_height=30,
+                                                font=("Arial", 18), border_width=3, corner_radius=7)
+        self.checkbox1.place(rely=0.4, relx=0.05)
 
-            self.check_var2 = customtkinter.StringVar(value="on")
-            self.checkbox2 = customtkinter.CTkCheckBox(master=self.frame1, text=" Letters -", variable=self.check_var2,
-                                                    onvalue="on", offvalue="off", checkbox_width=30, checkbox_height=30,
-                                                    font=("Arial", 18), border_width=3, corner_radius=7)
-            self.checkbox2.place(rely=0.55, relx=0.05)
+        self.check_var2 = customtkinter.StringVar(value="on")
+        self.checkbox2 = customtkinter.CTkCheckBox(master=self.frame1, text=" Letters -", variable=self.check_var2,
+                                                onvalue="on", offvalue="off", checkbox_width=30, checkbox_height=30,
+                                                font=("Arial", 18), border_width=3, corner_radius=7)
+        self.checkbox2.place(rely=0.55, relx=0.05)
 
-    def createTitle(self):
+    def create_title(self):
         self.title = customtkinter.CTkLabel(master=self.frame, text=" Password\n_Generator_",
-                                           font=("revamped", 23))
+                                        font=("revamped", 23))
         self.title.place(rely=0.015, relx=0.08)
 
-    def clearLogs(self):
+    def password_saver(self):
         file_path = filedialog.asksaveasfilename(defaultextension=".txt", initialfile="My password", filetypes=[("Text Files", "*.txt")])
 
         if file_path:
@@ -104,11 +120,11 @@ class Window:
             self.textbox.insert("0.0", " • Your password is saved!\n")
             self.textbox.configure(state="disabled")
 
-    def createOptionsFrame(self):
+    def create_options_frame(self):
         self.frame1 = customtkinter.CTkFrame(master=self.window, width=800, height=350)
         self.frame1.place(rely=0.04, relx=0.251)
 
-    def createTextBox(self):
+    def create_text_box(self):
         self.textbox = customtkinter.CTkTextbox(master=self.window, height=270, width=800, corner_radius=10,
                                                 font=("Cascadia Mono SemiBold", 18), state="normal")
         self.textbox.place(rely=0.574, relx=0.251)
