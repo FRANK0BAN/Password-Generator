@@ -24,6 +24,7 @@ class Window:
         self.appearance_mode_option_menu = None
         self.title = None
         self.textbox = None
+        self.custom_font = None
 #       -------------------------
         self.icon_path = "Images/Password Generator logo.ico"
         self.version = "1.0"
@@ -54,17 +55,18 @@ class Window:
         self.frame.place(rely=0, relx=0)
 
     def slider_event(self, value):
+        value = int(value)
         self.text.configure(text=f"Password length: {value}")
 
     def change_appearance_mode_event(self, new_appearance_mode: str):
         customtkinter.set_appearance_mode(new_appearance_mode)
 
     def create_slider(self):
-        self.slider = customtkinter.CTkSlider(master=self.frame1, from_=1, to=51, command=self.slider_event,
+        self.slider = customtkinter.CTkSlider(master=self.frame1, from_=1, to=50, command=self.slider_event,
                                                 number_of_steps=50, width=520, height=20, border_width=5)
         self.slider.place(rely=0.10, relx=0.048)
 
-        self.variable = self.slider.get()
+        self.variable = int(self.slider.get())
 
         self.text = customtkinter.CTkLabel(master=self.frame1, text=f"Password length: {self.variable}",
                                         font=("Segoe UI Variable Small Semibol", 21))
@@ -105,8 +107,9 @@ class Window:
         self.checkbox2.place(rely=0.55, relx=0.05)
 
     def create_title(self):
-        self.title = customtkinter.CTkLabel(master=self.frame, text=" Password\n_Generator_",
-                                        font=("revamped", 23))
+        self.custom_font = customtkinter.CTkFont(family="Revamped", size=23)
+
+        self.title = customtkinter.CTkLabel(master=self.frame, text=" Password\n_Generator_", font=self.custom_font)
         self.title.place(rely=0.015, relx=0.08)
 
     def password_saver(self):
