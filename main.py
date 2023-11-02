@@ -39,8 +39,8 @@ class Window:
         self.window.title(f"Password generator {self.version}")
         self.window.geometry("1120x700")
         self.window.wm_resizable(False, False)
-        self.window.iconbitmap(default=self.icon_path)
         self.window.winfo_toplevel()
+        self.window.iconbitmap(default=self.icon_path)
 #       -------------------------
         try:
             customtkinter.set_default_color_theme('themes/dark-blue.json')
