@@ -16,8 +16,6 @@ Hi, I would like to introduce you to a program called Password Generator. It is 
 - Choose character types to include in the password (_letters, digits, special characters_).
 - Save the generated password to a text file.
 - Personalize the color theme (_light, dark, system_).
-- Fixed bug with icon.
-- Publication of the repository.
 
 ## Requirements
 
