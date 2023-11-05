@@ -2,14 +2,20 @@ from tkinter import filedialog
 import customtkinter
 import random
 import string
+import ctypes as ct
+
+
+def change_appearance_mode(new_appearance_mode: str):
+    customtkinter.set_appearance_mode(new_appearance_mode)
+
 
 class Window:
 
     def __init__(self):
         self.window = None
-        self.frame1 = None
-        self.frame = None
-        self.password= None
+        self.general_frame = None
+        self.side_frame = None
+        self.password = None
         self.button = None
         self.button1 = None
         self.text = None
@@ -25,7 +31,7 @@ class Window:
         self.title = None
         self.textbox = None
         self.custom_font = None
-#       -------------------------
+        # ------------------------------
         self.icon_path = "Images/Password Generator logo.ico"
         self.version = "1.0"
         self.create_window()
@@ -35,71 +41,83 @@ class Window:
         self.window.title(f"Password generator {self.version}")
         self.window.geometry("1120x700")
         self.window.wm_resizable(False, False)
+        self.window.winfo_toplevel()
         self.window.iconbitmap(default=self.icon_path)
-#       -------------------------
+        # ------------------------------
         try:
             customtkinter.set_default_color_theme('themes/dark-blue.json')
         except Exception as error_type:
             self.check_error(error_type)
-#       -------------------------
-        self.create_options_frame()
-        self.create_frame()
+        # ------------------------------
+        self.create_general_frame()
+        self.create_side_frame()
         self.create_slider()
         self.create_checkbox()
         self.create_text_box()
         self.create_title()
         self.create_buttons()
         self.create_mode_menu()
+        self.dark_title_bar()
         self.window.mainloop()
-#       -------------------------
+        # ------------------------------
 
-    def check_error(self, error_type_and_reason):
+    def check_error(self, error_type):
         self.textbox.configure(state="normal")
-        self.textbox.insert("0.0", f" • ERROR: {error_type_and_reason}\n")
+        self.textbox.insert("0.0", f" • ERROR: {error_type}\n")
         self.textbox.configure(state="disabled")
 
-    def create_frame(self):
-        self.frame = customtkinter.CTkFrame(master=self.window, width=240, height=1920)
-        self.frame.place(rely=0, relx=0)
+    def dark_title_bar(self):
+        try:
+            self.window.update()
+            ct.windll.dwmapi.DwmSetWindowAttribute(ct.windll.user32.GetParent(self.window.winfo_id()), 20,
+                                                   ct.byref(ct.c_int(2)), ct.sizeof(ct.c_int(2)))
+        except Exception as error_type:
+            self.check_error(error_type)
+
+    def create_side_frame(self):
+        self.side_frame = customtkinter.CTkFrame(master=self.window, width=240, height=700)
+        self.side_frame.place(rely=0, relx=0)
 
     def slider_event(self, value):
         value = int(value)
         self.text.configure(text=f"Password length: {value}")
 
-    def change_appearance_mode_event(self, new_appearance_mode: str):
-        customtkinter.set_appearance_mode(new_appearance_mode)
-
     def create_slider(self):
         try:
-            self.slider = customtkinter.CTkSlider(master=self.frame1, from_=1, to=50, command=self.slider_event,
-                                                    number_of_steps=50, width=520, height=20, border_width=5)
+            self.slider = customtkinter.CTkSlider(master=self.general_frame, from_=1, to=50, command=self.slider_event,
+                                                  number_of_steps=50, width=520, height=20, border_width=5)
             self.slider.place(rely=0.10, relx=0.048)
 
             self.variable = int(self.slider.get())
 
-            self.text = customtkinter.CTkLabel(master=self.frame1, text=f"Password length: {self.variable}",
-                                            font=("Segoe UI Variable Small Semibol", 21))
+            self.text = customtkinter.CTkLabel(master=self.general_frame, text=f"Password length: {self.variable}",
+                                               font=("Segoe UI Variable Small Semibol", 21))
             self.text.place(rely=0.09, relx=0.715)
         except Exception as error_type:
             self.check_error(error_type)
 
     def create_mode_menu(self):
         try:
-            self.appearance_mode_option_menu = customtkinter.CTkOptionMenu(master=self.frame, values=["System", "Dark", "Light"],
-                                                                        command=self.change_appearance_mode_event,
-                                                                        width=185, height=34, font=("Arial", 14))
-            self.appearance_mode_option_menu.place(rely=0.33, relx=0.12)
+            self.appearance_mode_option_menu = customtkinter.CTkOptionMenu(master=self.side_frame,
+                                                                           values=["System", "Dark", "Light"],
+                                                                           command=change_appearance_mode,
+                                                                           width=185, height=34, font=("Arial", 14))
+            self.appearance_mode_option_menu.place(rely=0.9, relx=0.12)
         except Exception as error_type:
             self.check_error(error_type)
 
     def create_buttons(self):
         try:
-            self.button = customtkinter.CTkButton(master=self.frame1, text="Generate password", width=240, height=40,
-                                                font=("Segoe UI Variable Small Semibol", 16), command=self.generate_password)
+            self.button = customtkinter.CTkButton(master=self.general_frame, text="Generate password", width=240,
+                                                  height=40,
+                                                  font=("Segoe UI Variable Small Semibol", 16),
+                                                  command=self.generate_password)
             self.button.place(rely=0.78, relx=0.05)
 
-            self.button1 = customtkinter.CTkButton(master=self.frame1, text="Save my password", width=240, height=40,
-                                                font=("Segoe UI Variable Small Semibol", 16), command=self.password_saver, state="disabled")
+            self.button1 = customtkinter.CTkButton(master=self.general_frame, text="Save my password", width=240,
+                                                   height=40,
+                                                   font=("Segoe UI Variable Small Semibol", 16),
+                                                   command=self.password_saver, state="disabled")
             self.button1.place(rely=0.78, relx=0.38)
         except Exception as error_type:
             self.check_error(error_type)
@@ -107,35 +125,42 @@ class Window:
     def create_checkbox(self):
         try:
             self.check_var = customtkinter.StringVar(value="on")
-            self.checkbox = customtkinter.CTkCheckBox(master=self.frame1, text=" Special characters -", variable=self.check_var,
-                                                    onvalue="on", offvalue="off", checkbox_width=30, checkbox_height=30,
-                                                    font=("Arial", 18), border_width=3, corner_radius=7)
+            self.checkbox = customtkinter.CTkCheckBox(master=self.general_frame, text=" Special characters ",
+                                                      variable=self.check_var,
+                                                      onvalue="on", offvalue="off", checkbox_width=30,
+                                                      checkbox_height=30,
+                                                      font=("Arial", 18), border_width=3, corner_radius=7)
             self.checkbox.place(rely=0.25, relx=0.05)
 
             self.check_var1 = customtkinter.StringVar(value="on")
-            self.checkbox1 = customtkinter.CTkCheckBox(master=self.frame1, text=" Numbers -", variable=self.check_var1,
-                                                    onvalue="on", offvalue="off", checkbox_width=30, checkbox_height=30,
-                                                    font=("Arial", 18), border_width=3, corner_radius=7)
+            self.checkbox1 = customtkinter.CTkCheckBox(master=self.general_frame, text=" Numbers ",
+                                                       variable=self.check_var1,
+                                                       onvalue="on", offvalue="off", checkbox_width=30,
+                                                       checkbox_height=30,
+                                                       font=("Arial", 18), border_width=3, corner_radius=7)
             self.checkbox1.place(rely=0.4, relx=0.05)
 
             self.check_var2 = customtkinter.StringVar(value="on")
-            self.checkbox2 = customtkinter.CTkCheckBox(master=self.frame1, text=" Letters -", variable=self.check_var2,
-                                                    onvalue="on", offvalue="off", checkbox_width=30, checkbox_height=30,
-                                                    font=("Arial", 18), border_width=3, corner_radius=7)
+            self.checkbox2 = customtkinter.CTkCheckBox(master=self.general_frame, text=" Letters ",
+                                                       variable=self.check_var2,
+                                                       onvalue="on", offvalue="off", checkbox_width=30,
+                                                       checkbox_height=30,
+                                                       font=("Arial", 18), border_width=3, corner_radius=7)
             self.checkbox2.place(rely=0.55, relx=0.05)
         except Exception as error_type:
             self.check_error(error_type)
 
-
     def create_title(self):
         self.custom_font = customtkinter.CTkFont(family="Revamped", size=23)
 
-        self.title = customtkinter.CTkLabel(master=self.frame, text=" Password\n_Generator_", font=self.custom_font)
-        self.title.place(rely=0.015, relx=0.08)
+        self.title = customtkinter.CTkLabel(master=self.side_frame, text=" Password\n_Generator_",
+                                            font=self.custom_font)
+        self.title.place(rely=0.043, relx=0.08)
 
     def password_saver(self):
         try:
-            file_path = filedialog.asksaveasfilename(defaultextension=".txt", initialfile="My password", filetypes=[("Text Files", "*.txt")])
+            file_path = filedialog.asksaveasfilename(defaultextension=".txt", initialfile="My password",
+                                                     filetypes=[("Text Files", "*.txt")])
 
             if file_path:
                 with open(file_path, 'w') as file:
@@ -147,9 +172,9 @@ class Window:
         except Exception as error_type:
             self.check_error(error_type)
 
-    def create_options_frame(self):
-        self.frame1 = customtkinter.CTkFrame(master=self.window, width=800, height=350)
-        self.frame1.place(rely=0.04, relx=0.251)
+    def create_general_frame(self):
+        self.general_frame = customtkinter.CTkFrame(master=self.window, width=800, height=350)
+        self.general_frame.place(rely=0.04, relx=0.251)
 
     def create_text_box(self):
         self.textbox = customtkinter.CTkTextbox(master=self.window, height=270, width=800, corner_radius=10,
@@ -191,5 +216,6 @@ class Window:
             self.button1.configure(state="normal")
         except Exception as error_type:
             self.check_error(error_type)
+
 
 app = Window()
