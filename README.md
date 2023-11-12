@@ -50,7 +50,7 @@ This program is provided under the GNU General Public License v3.0. Details can 
 
 Nice to see you here! 
 
-This is a public repository where I encourage you to comment on my project. I'm not going to lie, this is my first serious project that I have completed for the time being. I am a beginner programmer so please be understanding about the code :)
+This is a public repository where I encourage you to comment on my project. I'm not going to lie, this is my first serious project that I have completed for the time being. I am a beginner programmer so please be understanding about the code :) - For example, not using grid placement.
 
 ## Author
 
