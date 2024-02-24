@@ -4,13 +4,22 @@
 
 ## Versions 🔧
 
-- 1.0 <
+- 1.1 <
+- 1.0
 
 ## What is this project? 🤔
 
 Hi, I would like to introduce you to a program called Password Generator. It is a very simple project written in Python which uses customtkinter library. In it you can generate passwords and save them in .txt format. The program is configured for users with different appearance preferences. You will find a Dark mode and a Light mode.
 
-## Features ✨
+
+## Features 1.1 🌊 ✨
+
+- Optimize the program
+- Adding a new function of not displaying the password in the console.
+- new features coming soon ;)
+
+
+## Features 1.0 ✨
 
 - Generate passwords with specified length.
 - Choose character types to include in the password (_letters, digits, special characters_).

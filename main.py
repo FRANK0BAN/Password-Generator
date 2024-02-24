@@ -2,6 +2,7 @@ from tkinter import filedialog
 import customtkinter
 import random
 import string
+import pyperclip
 import ctypes as ct
 
 
@@ -16,24 +17,28 @@ class Window:
         self.general_frame = None
         self.side_frame = None
         self.password = None
-        self.button = None
-        self.button1 = None
+        self.button_generate = None
+        self.button_copy = None
+        self.button_saver = None
         self.text = None
-        self.check_var = None
-        self.check_var1 = None
-        self.check_var2 = None
-        self.checkbox = None
-        self.checkbox1 = None
-        self.checkbox2 = None
+        self.check_show_password = None
+        self.check_special_characters = None
+        self.check_letters = None
+        self.check_numbers = None
+        self.checkbox_special_characters = None
+        self.checkbox_numbers = None
+        self.checkbox_letters = None
+        self.checkbox_show_password = None
         self.slider = None
         self.variable = None
+        self.massage = None
         self.appearance_mode_option_menu = None
         self.title = None
         self.textbox = None
         self.custom_font = None
         # ------------------------------
         self.icon_path = "Images/Password Generator logo.ico"
-        self.version = "1.0"
+        self.version = "1.1"
         self.create_window()
 
     def create_window(self):
@@ -108,54 +113,75 @@ class Window:
 
     def create_buttons(self):
         try:
-            self.button = customtkinter.CTkButton(master=self.general_frame, text="Generate password", width=240,
-                                                  height=40,
-                                                  font=("Segoe UI Variable Small Semibol", 16),
-                                                  command=self.generate_password)
-            self.button.place(rely=0.78, relx=0.05)
+            self.button_generate = customtkinter.CTkButton(master=self.general_frame, text="Generate password",
+                                                           width=225,
+                                                           height=40,
+                                                           font=("Segoe UI Variable Small Semibol", 16),
+                                                           command=self.generate_password)
+            self.button_generate.place(rely=0.78, relx=0.05)
 
-            self.button1 = customtkinter.CTkButton(master=self.general_frame, text="Save my password", width=240,
-                                                   height=40,
-                                                   font=("Segoe UI Variable Small Semibol", 16),
-                                                   command=self.password_saver, state="disabled")
-            self.button1.place(rely=0.78, relx=0.38)
+            self.button_saver = customtkinter.CTkButton(master=self.general_frame, text="Save my password", width=225,
+                                                        height=40,
+                                                        font=("Segoe UI Variable Small Semibol", 16),
+                                                        command=self.password_saver, state="disabled")
+            self.button_saver.place(rely=0.78, relx=0.36)
+
+            self.button_copy = customtkinter.CTkButton(master=self.general_frame, text="Copy my password", width=225,
+                                                       height=40,
+                                                       font=("Segoe UI Variable Small Semibol", 16),
+                                                       command=self.password_copy, state="disabled")
+            self.button_copy.place(rely=0.78, relx=0.67)
         except Exception as error_type:
             self.check_error(error_type)
 
     def create_checkbox(self):
         try:
-            self.check_var = customtkinter.StringVar(value="on")
-            self.checkbox = customtkinter.CTkCheckBox(master=self.general_frame, text=" Special characters ",
-                                                      variable=self.check_var,
-                                                      onvalue="on", offvalue="off", checkbox_width=30,
-                                                      checkbox_height=30,
-                                                      font=("Arial", 18), border_width=3, corner_radius=7)
-            self.checkbox.place(rely=0.25, relx=0.05)
+            self.check_special_characters = customtkinter.StringVar(value="on")
+            self.checkbox_special_characters = customtkinter.CTkCheckBox(master=self.general_frame,
+                                                                         text=" Special characters ",
+                                                                         variable=self.check_special_characters,
+                                                                         onvalue="on", offvalue="off",
+                                                                         checkbox_width=30,
+                                                                         checkbox_height=30,
+                                                                         font=("Arial", 18), border_width=3,
+                                                                         corner_radius=7)
+            self.checkbox_special_characters.place(rely=0.25, relx=0.05)
 
-            self.check_var1 = customtkinter.StringVar(value="on")
-            self.checkbox1 = customtkinter.CTkCheckBox(master=self.general_frame, text=" Numbers ",
-                                                       variable=self.check_var1,
-                                                       onvalue="on", offvalue="off", checkbox_width=30,
-                                                       checkbox_height=30,
-                                                       font=("Arial", 18), border_width=3, corner_radius=7)
-            self.checkbox1.place(rely=0.4, relx=0.05)
+            self.check_numbers = customtkinter.StringVar(value="on")
+            self.checkbox_numbers = customtkinter.CTkCheckBox(master=self.general_frame, text=" Numbers ",
+                                                              variable=self.check_numbers,
+                                                              onvalue="on", offvalue="off", checkbox_width=30,
+                                                              checkbox_height=30,
+                                                              font=("Arial", 18), border_width=3, corner_radius=7)
+            self.checkbox_numbers.place(rely=0.4, relx=0.05)
 
-            self.check_var2 = customtkinter.StringVar(value="on")
-            self.checkbox2 = customtkinter.CTkCheckBox(master=self.general_frame, text=" Letters ",
-                                                       variable=self.check_var2,
-                                                       onvalue="on", offvalue="off", checkbox_width=30,
-                                                       checkbox_height=30,
-                                                       font=("Arial", 18), border_width=3, corner_radius=7)
-            self.checkbox2.place(rely=0.55, relx=0.05)
+            self.check_letters = customtkinter.StringVar(value="on")
+            self.checkbox_letters = customtkinter.CTkCheckBox(master=self.general_frame, text=" Letters ",
+                                                              variable=self.check_letters,
+                                                              onvalue="on", offvalue="off", checkbox_width=30,
+                                                              checkbox_height=30,
+                                                              font=("Arial", 18), border_width=3, corner_radius=7)
+            self.checkbox_letters.place(rely=0.55, relx=0.05)
+
+            self.check_show_password = customtkinter.StringVar(value="on")
+            self.checkbox_show_password = customtkinter.CTkCheckBox(master=self.side_frame, text=" Show Password ",
+                                                                    variable=self.check_show_password,
+                                                                    onvalue="on", offvalue="off", checkbox_width=22,
+                                                                    checkbox_height=22,
+                                                                    font=("Arial", 15), border_width=3, corner_radius=7)
+            self.checkbox_show_password.place(rely=0.842, relx=0.2)
         except Exception as error_type:
             self.check_error(error_type)
 
     def create_title(self):
-        self.custom_font = customtkinter.CTkFont(family="Revamped", size=23)
+        try:
+            self.custom_font = customtkinter.CTkFont(family="Revamped", size=23)
 
-        self.title = customtkinter.CTkLabel(master=self.side_frame, text=" Password\n_Generator_",
-                                            font=self.custom_font)
-        self.title.place(rely=0.043, relx=0.08)
+            self.title = customtkinter.CTkLabel(master=self.side_frame, text=" Password\n_Generator_",
+                                                font=self.custom_font)
+            self.title.place(rely=0.043, relx=0.08)
+        except Exception as error_type:
+            self.check_error(error_type)
 
     def password_saver(self):
         try:
@@ -169,6 +195,12 @@ class Window:
                 self.textbox.configure(state="normal")
                 self.textbox.insert("0.0", " • Your password is saved!\n")
                 self.textbox.configure(state="disabled")
+        except Exception as error_type:
+            self.check_error(error_type)
+
+    def password_copy(self):
+        try:
+            pyperclip.copy(f'{self.password}')
         except Exception as error_type:
             self.check_error(error_type)
 
@@ -186,17 +218,17 @@ class Window:
         try:
             length = int(self.slider.get())
 
-            if self.check_var.get() == "on":
+            if self.check_special_characters.get() == "on":
                 special_characters = "!@#$%^&*()_+[]{}|;':,.<>?~"
             else:
                 special_characters = ""
 
-            if self.check_var1.get() == "on":
+            if self.check_numbers.get() == "on":
                 numbers = "0123456789"
             else:
                 numbers = ""
 
-            if self.check_var2.get() == "on":
+            if self.check_letters.get() == "on":
                 letters = string.ascii_letters
             else:
                 letters = ""
@@ -210,10 +242,15 @@ class Window:
                 return
 
             self.password = ''.join(random.choice(use_chars) for _ in range(length))
+            if self.check_show_password.get() == "on":
+                self.massage = f'• Generated password: {self.password}'
+            else:
+                self.massage = f'• Password was successfully generated'
             self.textbox.configure(state="normal")
-            self.textbox.insert("0.4", f" • Generated password: {self.password}\n")
+            self.textbox.insert("0.4", f" {self.massage}\n")
             self.textbox.configure(state="disabled")
-            self.button1.configure(state="normal")
+            self.button_saver.configure(state="normal")
+            self.button_copy.configure(state="normal")
         except Exception as error_type:
             self.check_error(error_type)
 
